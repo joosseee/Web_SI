@@ -19,17 +19,10 @@ def create_table_users():
                 ");")
     con.commit()
 
-    cur.execute("CREATE TABLE IF NOT EXISTS dates("
-                "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-                "fecha TEXT,"
-                "user_id TEXT,"
-                "FOREIGN KEY (user_id) REFERENCES users(username)"
-                ");")
-    con.commit()
-
-    cur.execute("CREATE TABLE IF NOT EXISTS ips("
+    cur.execute("CREATE TABLE IF NOT EXISTS dates_ip("
                 "id INTEGER PRIMARY KEY AUTOINCREMENT,"
                 "ip TEXT,"
+                "fecha TEXT,"
                 "user_id TEXT,"
                 "FOREIGN KEY (user_id) REFERENCES users(username)"
                 ");")
@@ -46,16 +39,13 @@ def create_table_users():
              int(elem[clave]['emails']['phishing']), int(elem[clave]['emails']['cliclados'])))
         con.commit()
         dates = elem[clave]["fechas"]
-        for date in dates:
-            cur.execute("INSERT OR IGNORE INTO dates (user_id, fecha)" \
-                        "VALUES ('%s', '%s')" %
-                        (clave, date))
-            con.commit()
         ips = elem[clave]["ips"]
-        for ip in ips:
-            cur.execute("INSERT OR IGNORE INTO ips (ip, user_id)" \
-                        "VALUES ('%s', '%s')" %
-                        (ip, clave))
+        for date,ip in zip(dates,ips):
+            cur.execute("INSERT OR IGNORE INTO dates_ip (ip,fecha,user_id)" \
+                        "VALUES ('%s', '%s','%s')" %
+                        (ip,date,clave))
+            con.commit()
+
 
 
 
