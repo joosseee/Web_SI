@@ -1,6 +1,14 @@
 import sqlite3
-import pandas as pd
 import json
+import os
+
+
+def remove_database():
+    database_path = 'bbdd.db'
+
+    if os.path.exists(database_path):
+        os.remove(database_path)
+
 
 def create_table_users():
     cur = con.cursor()
@@ -17,6 +25,7 @@ def create_table_users():
                 "emails_phising INTEGER,"
                 "emails_clicked INTEGER"
                 ");")
+
     con.commit()
 
     cur.execute("CREATE TABLE IF NOT EXISTS dates_ip("
@@ -26,6 +35,7 @@ def create_table_users():
                 "user_id TEXT,"
                 "FOREIGN KEY (user_id) REFERENCES users(username)"
                 ");")
+
     con.commit()
 
     for elem in data_users["usuarios"]:
@@ -37,16 +47,17 @@ def create_table_users():
             (clave, elem[clave]['telefono'], elem[clave]['contrasena'],
              elem[clave]['provincia'], elem[clave]['permisos'], int(elem[clave]['emails']['total']),
              int(elem[clave]['emails']['phishing']), int(elem[clave]['emails']['cliclados'])))
+
         con.commit()
+
         dates = elem[clave]["fechas"]
         ips = elem[clave]["ips"]
-        for date,ip in zip(dates,ips):
+        for date, ip in zip(dates,ips):
             cur.execute("INSERT OR IGNORE INTO dates_ip (ip,fecha,user_id)" \
                         "VALUES ('%s', '%s','%s')" %
-                        (ip,date,clave))
+                        (ip, date, clave))
+
             con.commit()
-
-
 
 
 def create_table_legal():
@@ -61,6 +72,7 @@ def create_table_legal():
                 "data_protection INTEGER,"
                 "creation INTEGER"
                 ");")
+
     con.commit()
 
     for elem in data_legal["legal"]:
@@ -72,18 +84,19 @@ def create_table_legal():
             (clave, int(elem[clave]['cookies']), int(elem[clave]['aviso']),
              int(elem[clave]['proteccion_de_datos']), int(elem[clave]['creacion'])))
 
+        con.commit()
 
 
+# Borrar base de datos
+remove_database()
 
-
-
-#conexion a la BBDD
+# Conexion a la BBDD
 con = sqlite3.connect('bbdd.db')
 
-#crear tabla users
+# Crear tabla users
 create_table_users()
 
-#crear tabla legal
+# Crear tabla legal
 create_table_legal()
 
 con.commit()
