@@ -35,8 +35,6 @@ def create_table_users():
                 ");")
     con.commit()
 
-    nclaves = data_users["usuarios"][0].keys
-
     for elem in data_users["usuarios"]:
         clave = list(elem.keys())[0]
 
@@ -83,7 +81,7 @@ def create_table_legal():
             "VALUES ('%s','%d','%d','%d','%d')" %
             (clave, int(elem[clave]['cookies']), int(elem[clave]['aviso']),
              int(elem[clave]['proteccion_de_datos']), int(elem[clave]['creacion'])))
-        con.commit()
+
 
 
 
