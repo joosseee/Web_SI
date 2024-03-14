@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estadisticas de phishing</title>
+
+</head>
+<body>
+    <h1>Estadísticas de Phishing por Tipo de Permiso</h1>
+    <table border="2">
+        <thead>
+            <tr>
+                <th>Tipo de Permiso</th>
+                <th>Número de observaciones</th>
+                <th>Número de valores ausentes (missing)</th>
+                <th>Mediana</th>
+                <th>Media</th>
+                <th>Varianza</th>
+                <th>Máximo</th>
+                <th>Mínimo</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for index, row in stats_df.iterrows() %}
+            <tr>
+                <td>{{ index }}</td>
+                <td>{{ row['Número de observaciones']|int }}</td>
+                <td>{{ row['Número de valores ausentes (missing)']|int }}</td>
+                <td>{{ row['Mediana'] }}</td>
+                <td>{{ row['Media'] }}</td>
+                <td>{{ row['Varianza'] }}</td>
+                <td>{{ row['Máximo']|int }}</td>
+                <td>{{ row['Mínimo']|int }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h1>Estadísticas de Phishing por Fuerza de Contraseña</h1>
+    <table border="2">
+        <thead>
+            <tr>
+                <th>Fuerza de contraseña</th>
+                <th>Número de observaciones</th>
+                <th>Número de valores ausentes (missing)</th>
+                <th>Mediana</th>
+                <th>Media</th>
+                <th>Varianza</th>
+                <th>Máximo</th>
+                <th>Mínimo</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for index, row in passwords_df.iterrows() %}
+            <tr>
+                <td>{{ index }}</td>
+                <td>{{ row['Número de observaciones']|int }}</td>
+                <td>{{ row['Número de valores ausentes (missing)']|int }}</td>
+                <td>{{ row['Mediana'] }}</td>
+                <td>{{ row['Media'] }}</td>
+                <td>{{ row['Varianza'] }}</td>
+                <td>{{ row['Máximo']|int }}</td>
+                <td>{{ row['Mínimo']|int }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
