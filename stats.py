@@ -69,3 +69,21 @@ def stats():
     conn.close()
 
     return stats_df, passwords_df
+
+def hashear_contraseñas_archivo(nombre_archivo):
+    with open(nombre_archivo, 'r', encoding='utf-8') as archivo:
+        passwords = archivo.read().splitlines()
+        hashes = set(hashlib.md5(passwd.encode()).hexdigest() for passwd in passwords)
+    return hashes
+
+
+def comparar_hashes(hashes_base_datos, hashes_diccionario):
+    list = []
+
+    for i in hashes_base_datos:
+        if i in hashes_diccionario:
+            list.append(0)
+        else:
+            list.append(1)
+
+    return list
