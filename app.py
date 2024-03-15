@@ -1,6 +1,6 @@
 import json
 from flask import Flask, render_template, request, redirect, url_for
-
+import stats
 app = Flask(__name__)
 
 
@@ -14,6 +14,10 @@ with open('data/legal.json') as web_history_file:
 def index():
     return render_template('index.html')
 
+@app.route('/stats')
+def stats():
+    stats_df, passwords_df = stats()
+    return render_template('EstadisticasPhishing.html', stats_df=stats_df, passwords_df=passwords_df)
 @app.route('/report', methods=['GET', 'POST'])
 def report():
     if request.method == 'POST':
