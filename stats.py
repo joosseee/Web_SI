@@ -70,6 +70,7 @@ def stats():
 
     return stats_df, passwords_df
 
+
 def hashear_contraseñas_archivo(nombre_archivo):
     with open(nombre_archivo, 'r', encoding='utf-8') as archivo:
         passwords = archivo.read().splitlines()

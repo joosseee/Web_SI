@@ -1,44 +1,65 @@
-#Mostrar la media de tiempo entre las contraseñas
 import sqlite3
 import pandas as pd
 import matplotlib.pyplot as plt
 import stats
+import base64
+from io import BytesIO
+
+
+def calcular_media_diferencias(df):
+    df['fecha'] = pd.to_datetime(df['fecha'], format="%d/%m/%Y")
+    df = df.sort_values(by=['user_id', 'fecha'])
+    df['diferencia'] = df.groupby('user_id')['fecha'].diff().dt.days
+    media = df.groupby('user_id')['diferencia'].mean().dropna()
+
+    media_df = media.reset_index()
+    media_df.columns = ['username', 'media']
+    return media_df
+
+
+def plot_to_base64(plot):
+    buf = BytesIO()
+    plot.savefig(buf, format='png')
+    buf.seek(0)
+    image_base64 = base64.b64encode(buf.read()).decode('utf-8')
+    buf.close()
+    return image_base64
+
+
 def meanPasswords():
     conn = sqlite3.connect("bbdd.db")
+    sql_query_users = "SELECT dates_ip.fecha, dates_ip.user_id FROM dates_ip JOIN users ON dates_ip.user_id = users.username WHERE users.permission = 0"
+    sql_query_admins = "SELECT dates_ip.fecha, dates_ip.user_id FROM dates_ip JOIN users ON dates_ip.user_id = users.username WHERE users.permission = 1"
 
-    sql_query = "SELECT fecha,user_id FROM dates_ip"
+    users_df = pd.read_sql_query(sql_query_users, conn)
+    admins_df = pd.read_sql_query(sql_query_admins, conn)
 
+    media_users = calcular_media_diferencias(users_df)
+    media_admins = calcular_media_diferencias(admins_df)
 
+    plt.figure()
+    media_users.plot(kind='bar', x='username', y='media', legend=False)
+    plt.title('Media de tiempo entre cambios de contraseña (Usuarios)', pad=20)
+    plt.xlabel('Nombre de usuario', labelpad=20)
+    plt.ylabel('Media de Tiempo (días)', labelpad=20)
+    plt.xticks(rotation=80)
+    plt.tight_layout()
+    user_img = plot_to_base64(plt)
+    plt.close()
 
-    df = pd.read_sql_query(sql_query,conn)
-    df['fecha'] = pd.to_datetime(df['fecha'], format='%d/%m/%Y')
-    # Calcular la diferencia de tiempo para usuarios normales
-    usuarios_normales = df[df['user_id'] != 'administrador'].copy()
-    usuarios_normales['diferencia_tiempo'] = usuarios_normales.groupby('user_id')['fecha'].transform( lambda x: (x.max() - x.min()).days) / 365
-    # Calcular la diferencia de tiempo para administradores
-    usuarios_administradores = df[df['user_id'] == 'administrador'].copy()
-    usuarios_administradores['diferencia_tiempo'] = usuarios_administradores.groupby('user_id')['fecha'].transform(lambda x: (x.max() - x.min()).days) / 365
-
-
-    media_tiempo_normales = usuarios_normales['diferencia_tiempo'].mean().astype(int)
-    media_tiempo_administradores = usuarios_administradores['diferencia_tiempo'].mean().astype(int)
-
-
-    media_df = pd.DataFrame({
-        'Usuarios': ['Normales', 'Administradores'],
-        'Media_tiempo': [media_tiempo_normales, media_tiempo_administradores]
-    })
-
-    #media_df.plot(kind='bar', x='Usuarios', y='Media_tiempo', legend=False)
-    #plt.title('Media de tiempo entre contraseñas')
-    #plt.xlabel('Tipo de Usuario')
-    #plt.ylabel('Media de Tiempo (días)')
-    #plt.show()
-
+    plt.figure()
+    media_admins.plot(kind='bar', x='username', y='media', legend=False)
+    plt.title('Media de tiempo entre cambios de contraseña (Administradores)', pad=20)
+    plt.xlabel('Nombre de usuario', labelpad=20)
+    plt.ylabel('Media de Tiempo (días)', labelpad=20)
+    plt.xticks(rotation=80)
+    plt.tight_layout()
+    admin_img = plot_to_base64(plt)
+    plt.close()
 
     conn.close()
 
-    return media_df
+    return user_img, admin_img
 
 
 def tenUSERS():
@@ -152,15 +173,12 @@ def webs_politicas_privacidad_por_año():
     return df_comparacion
 
 
-
 paginas_top5 = paginas_desactualizadas()
 useres = tenUSERS()
 passw = meanPasswords()
 webs = webs_politicas_privacidad_por_año()
 
-print(webs)
-print(paginas_top5)
-print(useres)
-print(passw)
-
-
+#print(webs)
+#print(paginas_top5)
+#print(useres)
+#print(passw)
