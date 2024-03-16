@@ -1,7 +1,7 @@
 import sqlite3
 import pandas as pd
 import matplotlib.pyplot as plt
-import stats
+import stats_script
 import base64
 from io import BytesIO
 
@@ -65,38 +65,38 @@ def meanPasswords():
 def tenUSERS():
     conn = sqlite3.connect('bbdd.db')
 
-    usuarios_df = pd.read_sql_query("SELECT username, hash_password FROM users", conn)
-    correos_phishing_df = pd.read_sql_query("SELECT username, emails_clicked,emails_phising FROM users", conn)
+    usuarios_df = pd.read_sql_query("SELECT username, hash_password, emails_clicked, emails_phising FROM users", conn)
 
-
-    hashes_small_rock_you = stats.hashear_contraseñas_archivo('SmallRockYou.txt')
-    usuarios_df['strength'] = stats.comparar_hashes(usuarios_df['hash_password'], hashes_small_rock_you)
+    hashes_small_rock_you = stats_script.hashear_contraseñas_archivo('SmallRockYou.txt')
+    usuarios_df['strength'] = stats_script.comparar_hashes(usuarios_df['hash_password'], hashes_small_rock_you)
 
     # Calcular la probabilidad de hacer clic en un correo de phishing para cada usuario
-    correos_phishing_df['probabilidad_click'] = correos_phishing_df['emails_clicked'] / correos_phishing_df[
-        'emails_phising']
+    usuarios_df['click_ratio'] = round((usuarios_df['emails_clicked'] / usuarios_df['emails_phising']) * 100, 2)
 
     # Seleccionar usuarios con contraseñas débiles
-    usuarios_debil = usuarios_df[usuarios_df['strength'] == 1]
+    usuarios_debil = usuarios_df[usuarios_df['strength'] == 0]
 
-    # Fusionar los DataFrames para obtener los usuarios con contraseñas débiles y su probabilidad de clic
-    usuarios_criticos_df = usuarios_debil.merge(correos_phishing_df, on='username')
+    usuarios_debil_ordenado = usuarios_debil.sort_values(by='click_ratio', ascending=False)
 
     # Seleccionar los 10 usuarios con mayor probabilidad de clic en correos de phishing
-    usuarios_criticos_top10 = usuarios_criticos_df.nlargest(10, 'probabilidad_click')
+    top10 = usuarios_debil_ordenado.head(10)
+
+    usuarios_criticos_df = top10[['username', 'click_ratio']].copy()
 
     # Graficar los usuarios más críticos en un gráfico de barras
-    #usuarios_criticos_top10.plot(kind='bar', x='user_id', y='probabilidad_click', legend=False)
-    #plt.title('Usuarios más críticos')
-    #plt.xlabel('Usuario')
-    #plt.ylabel('Probabilidad de clic en correos de phishing')
-    #plt.show()
-
-
+    plt.figure()
+    usuarios_criticos_df.plot(kind='bar', x='username', y='click_ratio', legend=False)
+    plt.title('Top 10 usuarios más críticos', pad=20)
+    plt.xlabel('Nombre de usuario', labelpad=20)
+    plt.ylabel('Probabilidad de pulsar correo phishing', labelpad=20)
+    plt.xticks(rotation=80)
+    plt.tight_layout()
+    usuarios_criticos_img = plot_to_base64(plt)
+    plt.close()
 
     conn.close()
 
-    return usuarios_criticos_top10
+    return usuarios_criticos_img
 
 
 def paginas_desactualizadas():
@@ -175,7 +175,7 @@ def webs_politicas_privacidad_por_año():
 
 paginas_top5 = paginas_desactualizadas()
 useres = tenUSERS()
-passw = meanPasswords()
+#passw = meanPasswords()
 webs = webs_politicas_privacidad_por_año()
 
 #print(webs)

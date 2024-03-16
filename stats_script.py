@@ -7,7 +7,7 @@ pd.set_option('display.max_columns', None)
 pd.set_option('display.width', None)
 
 
-def stats():
+def stats_function():
 
     # Conectar a la base de datos SQLite
     conn = sqlite3.connect('bbdd.db')

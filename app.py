@@ -1,6 +1,8 @@
 import json
 from flask import Flask, render_template, request, redirect, url_for
-import stats
+import stats_script
+
+
 app = Flask(__name__)
 
 
@@ -16,8 +18,9 @@ def index():
 
 @app.route('/stats')
 def stats():
-    stats_df, passwords_df = stats()
+    stats_df, passwords_df = stats_script.stats_function()
     return render_template('EstadisticasPhishing.html', stats_df=stats_df, passwords_df=passwords_df)
+
 @app.route('/report', methods=['GET', 'POST'])
 def report():
     if request.method == 'POST':
