@@ -9,25 +9,19 @@ def meanPasswords():
     sql_query = "SELECT fecha,user_id FROM dates_ip"
 
 
+
     df = pd.read_sql_query(sql_query,conn)
+    df['fecha'] = pd.to_datetime(df['fecha'], format='%d/%m/%Y')
+    # Calcular la diferencia de tiempo para usuarios normales
+    usuarios_normales = df[df['user_id'] != 'administrador'].copy()
+    usuarios_normales['diferencia_tiempo'] = usuarios_normales.groupby('user_id')['fecha'].transform( lambda x: (x.max() - x.min()).days) / 365
+    # Calcular la diferencia de tiempo para administradores
+    usuarios_administradores = df[df['user_id'] == 'administrador'].copy()
+    usuarios_administradores['diferencia_tiempo'] = usuarios_administradores.groupby('user_id')['fecha'].transform(lambda x: (x.max() - x.min()).days) / 365
 
-    df['fecha'] = pd.to_datetime(df['fecha'], dayfirst=True)
 
-
-
-
-
-
-
-
-    usuarios_normales = df[df['user_id'] != 'administrador']
-    usuarios_normales['diferencia_tiempo'] = usuarios_normales.groupby('user_id')['fecha'].diff().dt.days
-
-    usuarios_administradores = df[df['user_id']  == 'administrador']
-    usuarios_administradores['diferencia_tiempo'] = usuarios_administradores.groupby('user_id')['fecha'].diff().dt.days
-
-    media_tiempo_normales = usuarios_normales['diferencia_tiempo'].mean()
-    media_tiempo_administradores = usuarios_administradores['diferencia_tiempo'].mean()
+    media_tiempo_normales = usuarios_normales['diferencia_tiempo'].mean().astype(int)
+    media_tiempo_administradores = usuarios_administradores['diferencia_tiempo'].mean().astype(int)
 
 
     media_df = pd.DataFrame({
@@ -118,31 +112,55 @@ def paginas_desactualizadas():
 
 def webs_politicas_privacidad_por_año():
 
-    conn = sqlite3.connect('bbdd.db.db')
+    conn = sqlite3.connect('bbdd.db')
 
-    # Consulta SQL para extraer los datos relevantes
-    sql_query = """
-        SELECT strftime('%Y', creation) AS Año_Creación,
-               COUNT(*) AS Total_Webs,
-               SUM(cookies + warning + data_protection) AS Cumplen_Todas
-        FROM legal
-        WHERE (Cookies + Aviso + Protección_de_datos) = 3
-        GROUP BY Año_Creación
-    """
+    # Consulta SQL para webs que cumplen todas las políticas de privacidad por año de creación
+    sql_query_cumplen = """
+          SELECT creation AS Año_Creación,
+                 COUNT(*) AS Total_Webs_Cumplen
+          FROM legal
+          WHERE (cookies + warning + data_protection) = 3
+          GROUP BY Año_Creación
+      """
+
+    # Consulta SQL para webs que no cumplen todas las políticas de privacidad por año de creación
+    sql_query_no_cumplen = """
+          SELECT creation AS Año_Creación,
+                 COUNT(*) AS Total_Webs_No_Cumplen
+          FROM legal
+          WHERE (cookies + warning + data_protection) != 3
+          GROUP BY Año_Creación
+      """
 
 
-    df = pd.read_sql_query(sql_query, conn)
-
-    # Calcular la cantidad de sitios web que no cumplen todas las políticas de privacidad
-    df['No_Cumplen_Todas'] = df['Total_Webs'] - df['Cumplen_Todas']
+    df_cumplen = pd.read_sql_query(sql_query_cumplen, conn)
+    df_no_cumplen = pd.read_sql_query(sql_query_no_cumplen, conn)
+    df_comparacion = pd.concat([df_cumplen.set_index('Año_Creación'), df_no_cumplen.set_index('Año_Creación')], axis=1,keys=['Cumplen', 'No Cumplen']).reset_index()
+    df_comparacion.columns = df_comparacion.columns.droplevel(1)
+    df_comparacion.fillna(0, inplace=True)
+    df_comparacion['Cumplen'] = df_comparacion['Cumplen'].astype(int)
+    df_comparacion['No Cumplen'] = df_comparacion['No Cumplen'].astype(int)
 
     # Graficar los resultados
-
+    #df.plot(kind='bar', x='Año_Creación', y=['Cumplen_Todas', 'No_Cumplen_Todas'], stacked=True)
+    #plt.title('Sitios web que cumplen todas las políticas de privacidad por año de creación')
+    #plt.xlabel('Año de Creación')
+    #plt.ylabel('Cantidad de Sitios Web')
+    #plt.legend(['Cumplen Todas las Políticas', 'No Cumplen Todas las Políticas'])
+    #plt.show()
+    conn.close()
+    return df_comparacion
 
 
 
 paginas_top5 = paginas_desactualizadas()
 useres = tenUSERS()
 passw = meanPasswords()
+webs = webs_politicas_privacidad_por_año()
+
+print(webs)
+print(paginas_top5)
+print(useres)
+print(passw)
 
 
