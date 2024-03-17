@@ -1,6 +1,7 @@
 import json
 from flask import Flask, render_template, request, redirect, url_for
 import stats_script
+import MIS_functions4
 
 
 app = Flask(__name__)
@@ -15,6 +16,16 @@ with open('data/legal.json') as web_history_file:
 @app.route('/')
 def index():
     return render_template('index.html')
+
+@app.route('/grafics')
+def grafics():
+
+    top5_pages = MIS_functions4.paginas_desactualizadas()
+    politicasWeb = MIS_functions4.webs_politicas_privacidad_por_año()
+    usuariosCriticos = MIS_functions4.tenUSERS()
+
+    return render_template('Grafics.html',top5_pages=top5_pages,politicasWeb=politicasWeb,usersTen= usuariosCriticos)
+
 
 @app.route('/stats')
 def stats():

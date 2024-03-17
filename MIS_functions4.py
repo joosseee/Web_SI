@@ -96,7 +96,7 @@ def tenUSERS():
 
     conn.close()
 
-    return usuarios_criticos_img
+    return usuarios_criticos_df.to_json(orient="records")
 
 
 def paginas_desactualizadas():
@@ -128,7 +128,7 @@ def paginas_desactualizadas():
     # Cerrar la conexión a la base de datos
     conn.close()
 
-    return paginas_top5
+    return paginas_top5.to_json(orient="records")
 
 
 def webs_politicas_privacidad_por_año():
@@ -153,14 +153,14 @@ def webs_politicas_privacidad_por_año():
           GROUP BY Año_Creación
       """
 
-
     df_cumplen = pd.read_sql_query(sql_query_cumplen, conn)
     df_no_cumplen = pd.read_sql_query(sql_query_no_cumplen, conn)
-    df_comparacion = pd.concat([df_cumplen.set_index('Año_Creación'), df_no_cumplen.set_index('Año_Creación')], axis=1,keys=['Cumplen', 'No Cumplen']).reset_index()
+    df_comparacion = pd.concat([df_cumplen.set_index('Año_Creación'), df_no_cumplen.set_index('Año_Creación')], axis=1,keys=['Cumplen', 'No_Cumplen']).reset_index()
     df_comparacion.columns = df_comparacion.columns.droplevel(1)
     df_comparacion.fillna(0, inplace=True)
     df_comparacion['Cumplen'] = df_comparacion['Cumplen'].astype(int)
-    df_comparacion['No Cumplen'] = df_comparacion['No Cumplen'].astype(int)
+    df_comparacion['No_Cumplen'] = df_comparacion['No_Cumplen'].astype(int)
+    df_comparacion.sort_values(by='Año_Creación', inplace=True)
 
     # Graficar los resultados
     #df.plot(kind='bar', x='Año_Creación', y=['Cumplen_Todas', 'No_Cumplen_Todas'], stacked=True)
@@ -170,12 +170,12 @@ def webs_politicas_privacidad_por_año():
     #plt.legend(['Cumplen Todas las Políticas', 'No Cumplen Todas las Políticas'])
     #plt.show()
     conn.close()
-    return df_comparacion
+    return df_comparacion.to_json(orient="records")
 
 
 paginas_top5 = paginas_desactualizadas()
 useres = tenUSERS()
-#passw = meanPasswords()
+passw = meanPasswords()
 webs = webs_politicas_privacidad_por_año()
 
 #print(webs)
