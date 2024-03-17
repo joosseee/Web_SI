@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gráficos de datos</title>
+    <!-- Incluir Chart.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/0.5.8/chartjs-plugin-annotation.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <!-- Elemento del lienzo (canvas) donde se dibujará el gráfico -->
+
+    <div style="width: 650px">
+        <span>
+            <h1>Media de tiempo entre cambios de contraseña por usuario</h1>
+            <h3>Usuarios normales</h3>
+            <img src="data:image/png;base64,{{ user_img }}" alt="Media de tiempo entre cambios de contraseña por usuario de usuarios normales">
+            <br><br>
+            <h3>Usuarios administradores</h3>
+            <img src="data:image/png;base64,{{ admin_img }}" alt="Media de tiempo entre cambios de contraseña por usuario de usuarios administradores">
+        </span>
+        <br><br><br>
+        <span>
+        <h1>Top 10 usuarios más críticos</h1>
+            <h3>Usuarios con contraseñas débiles y con mayor probabilidad de pulsar en un correo de spam</h3>
+            <img src="data:image/png;base64,{{ usuarios_criticos_img }}" alt="Top 10 usuarios más críticos">
+
+        </span>
+        <br><br><br>
+
+        <span>
+        <h1>Top 5 páginas web con más políticas desactualizadas</h1>
+            <br>
+        <canvas id="myChart"></canvas>
+
+        </span>
+        <br><br><br>
+        <span>
+        <h1>Webs que cumplen / no cumplen todas las políticas de privacidad según el año de creación</h1>
+            <br>
+        <canvas id="myChart3"></canvas>
+
+        </span>
+
+
+    </div>
+
+    <script>
+
+        var top5_pages = {{ top5_pages | safe }};
+        var politicasWeb = {{ politicasWeb | safe }};
+
+
+        console.log(politicasWeb)
+
+        var years = politicasWeb.map(function(item) {
+            console.log(item.Año_Creación)
+            return item.Año_Creación;
+        });
+
+        var cumplen = politicasWeb.map(function(item) {
+            return item.Cumplen;
+        });
+
+        var no_cumplen = politicasWeb.map(function(item) {
+            return item.No_Cumplen;
+        });
+
+
+        // Extraer las etiquetas (URLs) y los datos de cookies y warnings
+        var labels = top5_pages.map(function(item) {
+            return item.web_URL;
+        });
+        var cookiesData = top5_pages.map(function(item) {
+            return item.cookies;
+        });
+        var warningData = top5_pages.map(function(item) {
+            return item.warning;
+        });
+
+        var dataProtection = top5_pages.map(function(item) {
+            return item.data_protection;
+        });
+
+        var creation = top5_pages.map(function(item) {
+            return item.creation;
+        });
+
+        var total_politicas = top5_pages.map(function(item) {
+            return item.total_politicas;
+        });
+
+       // Grafica 1
+
+        var data = {
+            labels: labels,
+            datasets: [{
+                label: 'Cookies',
+                data: cookiesData,
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1
+            }, {
+                label: 'Warnings',
+                data: warningData,
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            },{
+                label: 'data_protection',
+                data: dataProtection,
+                backgroundColor: 'rgba(255, 165, 0, 0.2)',
+                borderColor: 'rgba(255, 165, 0, 1)',
+                borderWidth: 1
+            },{
+                label: 'creation',
+                data: creation,
+                backgroundColor: 'rgba(60, 179, 113, 0.2)',
+                borderColor: 'rgba(60, 179, 113, 1)',
+                borderWidth: 1
+            },{
+                label: 'total_politicas',
+                data: total_politicas,
+                backgroundColor: 'rgba(238, 130, 238, 0.2)',
+                borderColor: 'rgba(238, 130, 238, 1)',
+                borderWidth: 1
+            }]
+        };
+
+
+        var data3 = {
+            labels: years,
+            datasets: [{
+                label: 'Cumplen',
+                data: cumplen,
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1
+            }, {
+                label: 'No Cumplen',
+                data: no_cumplen,
+                backgroundColor: 'rgba(rgba(60, 179, 113, 0.2)',
+                borderColor: 'rgba(rgba(60, 179, 113, 1)',
+                borderWidth: 1
+            }, ]
+        };
+
+    // Configurar opciones del gráfico, eje Y
+
+    var yAxisLabels = [];
+    for (var i = 0; i <= 10; i++) {
+        yAxisLabels.push((i * 0.5).toFixed(1));
+    }
+
+
+
+    var yAxisLabels3 = [];
+    for (var i = 0; i <= 10; i++) {
+        yAxisLabels3.push((i * 0.5).toFixed(1));
+    }
+
+    // Configurar opciones del gráfico con las etiquetas personalizadas en el eje Y
+    var options = {
+        scales: {
+            y: {
+                ticks: {
+                    callback: function(value, index, values) {
+                        return yAxisLabels[index];
+                    }
+                }
+            }
+        }
+    };
+
+
+
+    var options3 = {
+        scales: {
+            y: {
+                ticks: {
+                    callback: function(value, index, values) {
+                        return yAxisLabels3[index];
+                    }
+                }
+            }
+        }
+    };
+
+        // Obtener el contexto del lienzo
+        var ctx = document.getElementById('myChart').getContext('2d');
+
+         var ctx3 = document.getElementById('myChart3').getContext('2d');
+
+        // Crear el gráfico
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: data,
+            options: options
+        });
+
+
+        var myChart3 = new Chart(ctx3, {
+            type: 'line',
+            data: data3,
+            options: options3
+        });
+    </script>
+</body>
+</html>
