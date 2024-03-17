@@ -3,10 +3,11 @@ from flask import Flask, render_template, request, redirect, url_for
 import exercise_2
 import exercise_3
 import exercise_4
-
+import matplotlib
 app = Flask(__name__)
 
 
+matplotlib.use('agg')
 with open('data/users.json') as users_file:
     users_data = json.load(users_file)
 
