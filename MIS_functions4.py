@@ -39,7 +39,6 @@ def meanPasswords():
 
     plt.figure()
     media_users.plot(kind='bar', x='username', y='media', legend=False)
-    plt.title('Media de tiempo entre cambios de contraseña (Usuarios)', pad=20)
     plt.xlabel('Nombre de usuario', labelpad=20)
     plt.ylabel('Media de Tiempo (días)', labelpad=20)
     plt.xticks(rotation=80)
@@ -49,7 +48,6 @@ def meanPasswords():
 
     plt.figure()
     media_admins.plot(kind='bar', x='username', y='media', legend=False)
-    plt.title('Media de tiempo entre cambios de contraseña (Administradores)', pad=20)
     plt.xlabel('Nombre de usuario', labelpad=20)
     plt.ylabel('Media de Tiempo (días)', labelpad=20)
     plt.xticks(rotation=80)
@@ -86,7 +84,6 @@ def tenUSERS():
     # Graficar los usuarios más críticos en un gráfico de barras
     plt.figure()
     usuarios_criticos_df.plot(kind='bar', x='username', y='click_ratio', legend=False)
-    plt.title('Top 10 usuarios más críticos', pad=20)
     plt.xlabel('Nombre de usuario', labelpad=20)
     plt.ylabel('Probabilidad de pulsar correo phishing', labelpad=20)
     plt.xticks(rotation=80)
@@ -96,7 +93,7 @@ def tenUSERS():
 
     conn.close()
 
-    return usuarios_criticos_df.to_json(orient="records")
+    return usuarios_criticos_img
 
 
 def paginas_desactualizadas():
@@ -117,13 +114,6 @@ def paginas_desactualizadas():
 
     # Seleccionar las 5 fechas más antiguas entre aquellas que tienen más políticas
     paginas_top5 = df.nlargest(5, 'total_politicas').nsmallest(5, 'creation')
-
-    # Graficar las páginas web en un gráfico de barras
-    #paginas_top5.plot(kind='bar', x='Web', y=['Cookies', 'Aviso', 'Protección de datos'], stacked=True)
-    #plt.title('Páginas web con más políticas desactualizadas (5 fechas más antiguas)')
-    #plt.xlabel('Página web')
-    #plt.ylabel('Cantidad de políticas')
-    #plt.show()
 
     # Cerrar la conexión a la base de datos
     conn.close()
@@ -162,23 +152,6 @@ def webs_politicas_privacidad_por_año():
     df_comparacion['No_Cumplen'] = df_comparacion['No_Cumplen'].astype(int)
     df_comparacion.sort_values(by='Año_Creación', inplace=True)
 
-    # Graficar los resultados
-    #df.plot(kind='bar', x='Año_Creación', y=['Cumplen_Todas', 'No_Cumplen_Todas'], stacked=True)
-    #plt.title('Sitios web que cumplen todas las políticas de privacidad por año de creación')
-    #plt.xlabel('Año de Creación')
-    #plt.ylabel('Cantidad de Sitios Web')
-    #plt.legend(['Cumplen Todas las Políticas', 'No Cumplen Todas las Políticas'])
-    #plt.show()
     conn.close()
+
     return df_comparacion.to_json(orient="records")
-
-
-paginas_top5 = paginas_desactualizadas()
-useres = tenUSERS()
-passw = meanPasswords()
-webs = webs_politicas_privacidad_por_año()
-
-#print(webs)
-#print(paginas_top5)
-#print(useres)
-#print(passw)

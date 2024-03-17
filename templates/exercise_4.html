@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gráfico de Páginas Desactualizadas</title>
+    <title>Gráficos de datos</title>
     <!-- Incluir Chart.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/0.5.8/chartjs-plugin-annotation.min.js"></script>
@@ -13,23 +13,33 @@
 
     <!-- Elemento del lienzo (canvas) donde se dibujará el gráfico -->
 
-    <div style="width: 600px; height: 600px;">
+    <div>
+        <span>
+            <h1>Media de tiempo entre cambios de contraseña por usuario</h1>
+            <h3>Usuarios normales</h3>
+            <img src="data:image/png;base64,{{ user_img }}" alt="Media de tiempo entre cambios de contraseña por usuario de usuarios normales">
+            <br>
+            <h3>Usuarios administradores</h3>
+            <img src="data:image/png;base64,{{ admin_img }}" alt="Media de tiempo entre cambios de contraseña por usuario de usuarios administradores">
+        </span>
+        <br><br>
+        <span>
+        <h1>Top 10 usuarios más críticos</h1>
+            <h3>Usuarios con contraseñas débiles y con mayor probabilidad de pulsar en un correo de spam</h3>
+            <img src="data:image/png;base64,{{ usuarios_criticos_img }}" alt="Top 10 usuarios más críticos">
 
+        </span>
         <span>
         <h1>Gráfico de Páginas Desactualizadas</h1>
          <canvas id="myChart"></canvas>
 
-    </span>
-    <span>
-        <h1>Gráfico de Politicas de privacidad</h1>
-         <canvas id="myChart2"></canvas>
+        </span>
 
-    </span>
         <span>
         <h1>Gráfico de años cumplimiento de politicas</h1>
          <canvas id="myChart3"></canvas>
 
-    </span>
+        </span>
 
     </div>
 

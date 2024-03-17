@@ -17,14 +17,15 @@ with open('data/legal.json') as web_history_file:
 def index():
     return render_template('index.html')
 
-@app.route('/grafics')
-def grafics():
+@app.route('/MIS_functions')
+def MIS_functions():
 
     top5_pages = MIS_functions4.paginas_desactualizadas()
     politicasWeb = MIS_functions4.webs_politicas_privacidad_por_año()
     usuariosCriticos = MIS_functions4.tenUSERS()
+    user_img, admin_img = MIS_functions4.meanPasswords()
 
-    return render_template('Grafics.html',top5_pages=top5_pages,politicasWeb=politicasWeb,usersTen= usuariosCriticos)
+    return render_template('exercise_4.html', top5_pages=top5_pages, politicasWeb=politicasWeb, usuarios_criticos_img=usuariosCriticos, user_img=user_img, admin_img=admin_img)
 
 
 @app.route('/stats')
