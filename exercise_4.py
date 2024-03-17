@@ -1,7 +1,7 @@
 import sqlite3
 import pandas as pd
 import matplotlib.pyplot as plt
-import stats_script
+import exercise_3
 import base64
 from io import BytesIO
 
