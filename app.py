@@ -1,5 +1,6 @@
 import json
 from flask import Flask, render_template, request, redirect, url_for
+import exercise_2
 import exercise_3
 import exercise_4
 
@@ -27,21 +28,17 @@ def MIS_functions():
     return render_template('exercise_4.html', top5_pages=top5_pages, politicasWeb=politicasWeb, usuarios_criticos_img=usuariosCriticos, user_img=user_img, admin_img=admin_img)
 
 
-@app.route('/stats')
+@app.route('/phishing_stats')
 def stats():
     stats_df, passwords_df = exercise_3.stats_function()
     return render_template('exercise_3.html', stats_df=stats_df, passwords_df=passwords_df)
 
-@app.route('/report', methods=['GET', 'POST'])
-def report():
-    if request.method == 'POST':
 
-        return redirect(url_for('index'))
-    return render_template('report.html')
+@app.route('/values_computation')
+def values_computation():
+    df_results = exercise_2.data_querys()
+    return render_template('exercise_2.html', df_results = df_results)
 
-@app.route('/courses')
-def courses():
-    return render_template('courses.html', users=users_data, web_history=web_history_data)
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valores Calculados</title>
+    <style>
+        td, th {
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Valores calculados con los datos de de la tabla "users" de la base de datos</h1>
+    <br>
+    <table border="2">
+            {% for index, row in df_results.iterrows() %}
+                <tr>
+                    <th>Número de muestras (valores distintos de missing)</th>
+                    <td>{{ row['numero_muestras']|int }}</td>
+                </tr>
+                <tr>
+                    <th>Media del total de fechas</th>
+                    <td>{{ row['media_fechas'] }}</td>
+                </tr>
+                <tr>
+                    <th>Desviación estándar del total de fechas</th>
+                    <td>{{ row['desviacion_fechas'] }}</td>
+                </tr>
+                <tr>
+                    <th>Media del total de IPs</th>
+                    <td>{{ row['media_ip'] }}</td>
+                </tr>
+                <tr>
+                    <th>Desviación estándar del total de IPs</th>
+                    <td>{{ row['desviacion_ip'] }}</td>
+                </tr>
+                <tr>
+                    <th>Media de emails phishing clicados (todos usuarios)</th>
+                    <td>{{ row['media_phishing'] }}</td>
+                </tr>
+                <tr>
+                    <th>Desviación estándar de emails phishing clicados (todos usuarios)</th>
+                    <td>{{ row['desviacion_phishing'] }}</td>
+                </tr>
+                <tr>
+                    <th>Mínimo de emails recibidos</th>
+                    <td>{{ row['min_emails']|int }}</td>
+                </tr>
+                <tr>
+                    <th>Máximo de emails recibidos</th>
+                    <td>{{ row['max_emails']|int }}</td>
+                </tr>
+                <tr>
+                    <th>Mínimo de emails phishing clicados (administradores)</th>
+                    <td>{{ row['min_phishing_admin']|int }}</td>
+                </tr>
+                <tr>
+                    <th>Máximo de emails phishing clicados (administradores)</th>
+                    <td>{{ row['max_phishing_admin']|int }}</td>
+                </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

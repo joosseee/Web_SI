@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gráficos de datos</title>
+    <title>Gráficos de Datos</title>
     <!-- Incluir Chart.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/0.5.8/chartjs-plugin-annotation.min.js"></script>
@@ -39,7 +39,7 @@
         </span>
         <br><br><br>
         <span>
-        <h1>Webs que cumplen / no cumplen todas las políticas de privacidad según el año de creación</h1>
+        <h1>Número de webs que cumplen / no cumplen todas las políticas de privacidad según el año de creación</h1>
             <br>
         <canvas id="myChart3"></canvas>
 
@@ -104,25 +104,19 @@
                 borderColor: 'rgba(255, 99, 132, 1)',
                 borderWidth: 1
             }, {
-                label: 'Warnings',
+                label: 'Aviso legal',
                 data: warningData,
                 backgroundColor: 'rgba(54, 162, 235, 0.2)',
                 borderColor: 'rgba(54, 162, 235, 1)',
                 borderWidth: 1
             },{
-                label: 'data_protection',
+                label: 'Protección de datos',
                 data: dataProtection,
                 backgroundColor: 'rgba(255, 165, 0, 0.2)',
                 borderColor: 'rgba(255, 165, 0, 1)',
                 borderWidth: 1
             },{
-                label: 'creation',
-                data: creation,
-                backgroundColor: 'rgba(60, 179, 113, 0.2)',
-                borderColor: 'rgba(60, 179, 113, 1)',
-                borderWidth: 1
-            },{
-                label: 'total_politicas',
+                label: 'Total',
                 data: total_politicas,
                 backgroundColor: 'rgba(238, 130, 238, 0.2)',
                 borderColor: 'rgba(238, 130, 238, 1)',

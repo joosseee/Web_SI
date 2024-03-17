@@ -1,55 +1,39 @@
 import sqlite3
 import pandas as pd
 
-con = sqlite3.connect('bbdd.db')
 
-#consultas
-q_users = "SELECT * FROM users WHERE username IS NOT NULL"
-q_fechas = "SELECT * FROM dates_ip WHERE user_id IN(SELECT username FROM users)"
-q_admin = "SELECT * FROM users WHERE permission IS 1"
+def data_querys():
+    con = sqlite3.connect('bbdd.db')
 
-#dataframes
-df_users = pd.read_sql_query(q_users, con)
-df_dates = pd.read_sql_query(q_fechas, con)
-df_admin = pd.read_sql_query(q_admin, con)
 
-#número de muestras
-print("Numero de muestras:")
-print(df_users['username'].count(), end="\n")
+    # consultas
+    q_users = "SELECT * FROM users WHERE username IS NOT NULL"
+    q_fechas = "SELECT * FROM dates_ip"
+    q_admin = "SELECT * FROM users WHERE permission IS 1"
 
-#media y desviación estándar del total de fechas en las que se ha cambiado la contraseña
-print("Media y desviacion estandar del total de fechas en las que se ha cambiado la contraseña")
-print("Media:")
-print(df_dates.groupby('user_id').count().mean()['fecha'])
-print("Desviacion estandar:")
-print(df_dates.groupby('user_id').count().std()['fecha'])
 
-#media y desviacion estandar del total de IPs que se han detectado
-print("Media y desviacion estandar del total de IPs que se han detectado")
-print("Media:")
-print(df_dates.groupby('user_id').count().mean()['ip'])
-print("Desviacion estandar:")
-print(df_dates.groupby('user_id').count().std()['ip'])
+    # dataframes
+    df_users = pd.read_sql_query(q_users, con)
+    df_dates = pd.read_sql_query(q_fechas, con)
+    df_admin = pd.read_sql_query(q_admin, con)
 
-#media y desviacion estandar del numero de emails recibidos de phising en los que ha interactuado cualquier usuario
-print("Media y desviación estándar del número de email recibidos de phishing en los que ha interactuado cualquier usuario")
-print("Media:")
-print(df_users['emails_phising'].mean())
-print(("Desviacion estandar:"))
-print(df_users['emails_phising'].std())
 
-#valor minimo y valor maximo del total de emails recibidos
-print("Valor minimo y valor maximo del total de emials recibidos")
-print("Minimo:")
-print(df_users['emails_total'].min())
-print("Maximo:")
-print(df_users['emails_total'].max())
+    results = {
+        'numero_muestras': df_users['username'].count(),
+        'media_fechas': round(df_dates.groupby('user_id').count().mean()['fecha'], 4),
+        'desviacion_fechas': round(df_dates.groupby('user_id').count().std()['fecha'], 4),
+        'media_ip': round(df_dates.groupby('user_id').count().mean()['ip'], 4),
+        'desviacion_ip': round(df_dates.groupby('user_id').count().std()['ip'], 4),
+        'media_phishing': round(df_users['emails_clicked'].mean(), 4),
+        'desviacion_phishing': round(df_users['emails_clicked'].std(), 4),
+        'min_emails': df_users['emails_total'].min(),
+        'max_emails': df_users['emails_total'].max(),
+        'min_phishing_admin': df_admin['emails_clicked'].min(),
+        'max_phishing_admin': df_admin['emails_clicked'].max()
+    }
 
-#valor minimo y valor maximo del numero de emails phising en los que ha interactuado un administrador
-print("Valor mínimo y valor máximo del número de emails phishing en los que ha interactuado un administrador")
-print("Minimo:")
-print(df_admin['emails_clicked'].min())
-print("Maximo:")
-print(df_admin['emails_clicked'].max())
+    con.close()
 
-con.close()
+    df_results = pd.DataFrame([results])
+
+    return df_results
