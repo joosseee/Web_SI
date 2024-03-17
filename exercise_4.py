@@ -85,7 +85,7 @@ def tenUSERS():
     plt.figure()
     usuarios_criticos_df.plot(kind='bar', x='username', y='click_ratio', legend=False)
     plt.xlabel('Nombre de usuario', labelpad=20)
-    plt.ylabel('Probabilidad de pulsar correo phishing', labelpad=20)
+    plt.ylabel('Probabilidad de pulsar correo phishing (%)', labelpad=20)
     plt.xticks(rotation=80)
     plt.tight_layout()
     usuarios_criticos_img = plot_to_base64(plt)
