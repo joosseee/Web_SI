@@ -65,8 +65,8 @@ def tenUSERS():
 
     usuarios_df = pd.read_sql_query("SELECT username, hash_password, emails_clicked, emails_phising FROM users", conn)
 
-    hashes_small_rock_you = stats_script.hashear_contraseñas_archivo('SmallRockYou.txt')
-    usuarios_df['strength'] = stats_script.comparar_hashes(usuarios_df['hash_password'], hashes_small_rock_you)
+    hashes_small_rock_you = exercise_3.hashear_contraseñas_archivo('data/SmallRockYou.txt')
+    usuarios_df['strength'] = exercise_3.comparar_hashes(usuarios_df['hash_password'], hashes_small_rock_you)
 
     # Calcular la probabilidad de hacer clic en un correo de phishing para cada usuario
     usuarios_df['click_ratio'] = round((usuarios_df['emails_clicked'] / usuarios_df['emails_phising']) * 100, 2)

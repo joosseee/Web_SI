@@ -1,8 +1,7 @@
 import json
 from flask import Flask, render_template, request, redirect, url_for
 import exercise_3
-import stats_script
-import MIS_functions4
+import exercise_4
 
 app = Flask(__name__)
 
@@ -20,10 +19,10 @@ def index():
 @app.route('/MIS_functions')
 def MIS_functions():
 
-    top5_pages = MIS_functions4.paginas_desactualizadas()
-    politicasWeb = MIS_functions4.webs_politicas_privacidad_por_año()
-    usuariosCriticos = MIS_functions4.tenUSERS()
-    user_img, admin_img = MIS_functions4.meanPasswords()
+    top5_pages = exercise_4.paginas_desactualizadas()
+    politicasWeb = exercise_4.webs_politicas_privacidad_por_año()
+    usuariosCriticos = exercise_4.tenUSERS()
+    user_img, admin_img = exercise_4.meanPasswords()
 
     return render_template('exercise_4.html', top5_pages=top5_pages, politicasWeb=politicasWeb, usuarios_criticos_img=usuariosCriticos, user_img=user_img, admin_img=admin_img)
 

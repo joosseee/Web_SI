@@ -15,7 +15,7 @@ def stats_function():
     emails_phishing_df = pd.read_sql_query("SELECT permission, emails_phising FROM users", conn)
     passwords_df = pd.read_sql_query("SELECT hash_password, emails_phising FROM users", conn)
 
-    hashes_small_rock_you = hashear_contraseñas_archivo('SmallRockYou.txt')
+    hashes_small_rock_you = hashear_contraseñas_archivo('data/SmallRockYou.txt')
 
     passwords_df['strength'] = comparar_hashes(passwords_df['hash_password'], hashes_small_rock_you)
 
