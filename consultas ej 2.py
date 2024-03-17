@@ -51,3 +51,5 @@ print("Minimo:")
 print(df_admin['emails_clicked'].min())
 print("Maximo:")
 print(df_admin['emails_clicked'].max())
+
+con.close()
