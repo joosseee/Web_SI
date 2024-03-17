@@ -13,33 +13,38 @@
 
     <!-- Elemento del lienzo (canvas) donde se dibujará el gráfico -->
 
-    <div>
+    <div style="width: 650px">
         <span>
             <h1>Media de tiempo entre cambios de contraseña por usuario</h1>
             <h3>Usuarios normales</h3>
             <img src="data:image/png;base64,{{ user_img }}" alt="Media de tiempo entre cambios de contraseña por usuario de usuarios normales">
-            <br>
+            <br><br>
             <h3>Usuarios administradores</h3>
             <img src="data:image/png;base64,{{ admin_img }}" alt="Media de tiempo entre cambios de contraseña por usuario de usuarios administradores">
         </span>
-        <br><br>
+        <br><br><br>
         <span>
         <h1>Top 10 usuarios más críticos</h1>
             <h3>Usuarios con contraseñas débiles y con mayor probabilidad de pulsar en un correo de spam</h3>
             <img src="data:image/png;base64,{{ usuarios_criticos_img }}" alt="Top 10 usuarios más críticos">
 
         </span>
+        <br><br><br>
+
         <span>
-        <h1>Gráfico de Páginas Desactualizadas</h1>
-         <canvas id="myChart"></canvas>
+        <h1>Top 5 páginas web con más políticas desactualizadas</h1>
+            <br>
+        <canvas id="myChart"></canvas>
+
+        </span>
+        <br><br><br>
+        <span>
+        <h1>Webs que cumplen / no cumplen todas las políticas de privacidad según el año de creación</h1>
+            <br>
+        <canvas id="myChart3"></canvas>
 
         </span>
 
-        <span>
-        <h1>Gráfico de años cumplimiento de politicas</h1>
-         <canvas id="myChart3"></canvas>
-
-        </span>
 
     </div>
 
