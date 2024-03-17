@@ -47,7 +47,7 @@
 
         var top5_pages = {{ top5_pages | safe }};
         var politicasWeb = {{ politicasWeb | safe }};
-        var usersTen = {{ usersTen | safe }};
+
 
         console.log(politicasWeb)
 
@@ -64,13 +64,6 @@
             return item.No_Cumplen;
         });
 
-        var users = usersTen.map(function(item) {
-            return item.username;
-        });
-
-        var click_ratio = usersTen.map(function(item) {
-            return item.click_ratio;
-        });
 
         // Extraer las etiquetas (URLs) y los datos de cookies y warnings
         var labels = top5_pages.map(function(item) {
@@ -132,16 +125,6 @@
             }]
         };
 
-        var data2 = {
-            labels: users,
-            datasets: [{
-                label: 'click_ratio',
-                data: click_ratio,
-                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                borderColor: 'rgba(255, 99, 132, 1)',
-                borderWidth: 1
-            }]
-        };
 
         var data3 = {
             labels: years,
@@ -167,10 +150,7 @@
         yAxisLabels.push((i * 0.5).toFixed(1));
     }
 
-    var yAxisLabels2 = [];
-    for (var i = 0; i <= 10; i++) {
-        yAxisLabels2.push((i * 10).toFixed(1));
-    }
+
 
     var yAxisLabels3 = [];
     for (var i = 0; i <= 10; i++) {
@@ -190,17 +170,7 @@
         }
     };
 
-    var options2 = {
-        scales: {
-            y: {
-                ticks: {
-                    callback: function(value, index, values) {
-                        return yAxisLabels2[index];
-                    }
-                }
-            }
-        }
-    };
+
 
     var options3 = {
         scales: {
@@ -217,9 +187,7 @@
         // Obtener el contexto del lienzo
         var ctx = document.getElementById('myChart').getContext('2d');
 
-        var ctx2 = document.getElementById('myChart2').getContext('2d');
-
-        var ctx3 = document.getElementById('myChart3').getContext('2d');
+         var ctx3 = document.getElementById('myChart3').getContext('2d');
 
         // Crear el gráfico
         var myChart = new Chart(ctx, {
@@ -228,13 +196,8 @@
             options: options
         });
 
-        var myChart2 = new Chart(ctx2, {
-            type: 'bar',
-            data: data2,
-            options: options2
-        });
 
-        var myChart2 = new Chart(ctx3, {
+        var myChart3 = new Chart(ctx3, {
             type: 'line',
             data: data3,
             options: options3
