@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Usuarios críticos</title>
+</head>
+<body>
+    <div>
+        <h1>Seleccione el número de usuarios con el que desea realizar la gráfica</h1>
+        <li>
+            <form action="/critical_users" method="post">
+                <label for="num_users">Número de usuarios críticos:</label>
+                <input type="number" id="num_users" name="num_users" min="1" max={{ num_critical }} required>
+                <button type="submit">Mostrar</button>
+            </form>
+        </li>
+    </div>
+
+    <div>
+        {%  if top_x_criticos %}
+        <h2>Gráfica de usuarios críticos</h2>
+        <img src="data:image/png;base64,{{ top_x_criticos }}" alt="Gráfica de usuarios críticos">
+        {% endif %}
+    </div>
+</body>
+</html>
