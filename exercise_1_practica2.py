@@ -50,6 +50,26 @@ def xUsers(num_users):
     return usuarios_criticos_img, num_critical
 
 
-def xPages():
-    # por hacer
-    print("hello")
+def xPages(num_pages):
+    conn = sqlite3.connect('bbdd.db')
+    data_df = pd.read_sql_query("SELECT web_URL, cookies, warning, data_protection, creation FROM legal", conn)
+
+    data_df['puntuajes'] = data_df['warning'] + data_df['cookies'] + data_df['data_protection']
+
+    data_df = data_df.sort_values(by=['puntuajes', 'creation'], ascending=[False, True])
+    num_critical = len(data_df)
+    paginas_desactualizadas = data_df[['web_URL', 'puntuajes', 'creation']].head(num_pages)
+
+    # Graficar
+    plt.figure()
+    paginas_desactualizadas.plot(kind='bar', x='web_URL', y='puntuajes', legend=False)
+    plt.xlabel('Nombre web', labelpad=20)
+    plt.ylabel('Puntuación', labelpad=20)
+    plt.xticks(rotation=80)
+    plt.tight_layout()
+    paginas_desactualizadas_img = plot_to_base64(plt)
+    plt.close()
+
+    conn.close()
+
+    return paginas_desactualizadas_img, num_critical

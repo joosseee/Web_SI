@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Páginas desactualizadas</title>
+</head>
+<body>
+    <div>
+        <h1>Seleccione el número de páginas con el que desea realizar la gráfica</h1>
+        <li>
+            <form action="/critical_pages" method="post">
+                <label for="num_pages">Número de páginas desactualizadas:</label>
+                <input type="number" id="num_pages" name="num_pages" min="1" max={{ num_critical }} required>
+                <button type="submit">Mostrar</button>
+            </form>
+        </li>
+    </div>
+
+    <div>
+        {%  if top_x_pages %}
+        <h2>Gráfica de páginas desactualizadas</h2>
+        <img src="data:image/png;base64,{{ top_x_pages }}" alt="Gráfica de páginas desactualizadas">
+        {% endif %}
+    </div>
+</body>
+</html>

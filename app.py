@@ -57,6 +57,17 @@ def xUsers():
 
     return render_template('exercise_1_practica2.html', top_x_criticos=top_x_criticos, num_critical=num_critical)
 
+@app.route('/critical_pages', methods=['GET', 'POST'])
+def xPages():
+    if request.method=='POST':
+        num_pages = int(request.form['num_pages'])
+        top_x_pages, num_critical = exercise_1_practica2.xPages(num_pages)
+    else:
+        top_x_pages, num_critical = exercise_1_practica2.xPages(1)
+        top_x_pages = None
+
+    return render_template('exercise_1b_practica2.html', top_x_pages=top_x_pages, num_critical=num_critical)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
