@@ -73,3 +73,45 @@ def xPages(num_pages):
     conn.close()
 
     return paginas_desactualizadas_img, num_critical
+
+def xUsersClics(num_users, clics):
+    conn = sqlite3.connect('bbdd.db')
+
+    usuarios_df = pd.read_sql_query("SELECT username, hash_password, emails_clicked, emails_phising FROM users", conn)
+
+    hashes_small_rock_you = exercise_3.hashear_contraseñas_archivo('data/SmallRockYou.txt')
+    usuarios_df['strength'] = exercise_3.comparar_hashes(usuarios_df['hash_password'], hashes_small_rock_you)
+
+    # Calcular la probabilidad de hacer clic en un correo de phishing para cada usuario
+    usuarios_df['click_ratio'] = round((usuarios_df['emails_clicked'] / usuarios_df['emails_phising']) * 100, 2)
+
+    # Seleccionar usuarios con contraseñas débiles
+    usuarios_debil = usuarios_df[usuarios_df['strength'] == 0]
+    if clics == 'above':
+        usuarios_filtrados = usuarios_debil[usuarios_debil['click_ratio'] > 50]
+    elif clics == 'below':
+        usuarios_filtrados = usuarios_debil[usuarios_debil['click_ratio'] <= 50]
+
+
+
+    num_critical = len(usuarios_filtrados)
+    usuarios_filtrados_ordenados = usuarios_filtrados.sort_values(by='click_ratio', ascending=False)
+
+    topX = usuarios_filtrados_ordenados.head(num_users)
+    usuarios_criticos_df = topX[['username', 'click_ratio']].copy()
+
+    # Graficar los usuarios más críticos en un gráfico de barras
+    plt.figure()
+    usuarios_criticos_df.plot(kind='bar', x='username', y='click_ratio', legend=False)
+    plt.xlabel('Nombre de usuario', labelpad=20)
+    plt.ylabel('Probabilidad de pulsar correo phishing (%)', labelpad=20)
+    plt.xticks(rotation=80)
+    plt.tight_layout()
+    usuarios_criticos_img = plot_to_base64(plt)
+    plt.close()
+
+    conn.close()
+
+    return usuarios_criticos_img, num_critical
+
+

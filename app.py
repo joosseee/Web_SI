@@ -4,7 +4,7 @@ import exercise_2
 import exercise_3
 import exercise_4
 import matplotlib
-import exercise_1_practica2
+import exercise_1and2_practica2
 
 app = Flask(__name__)
 
@@ -46,13 +46,14 @@ def values_computation():
 
 # practica 2
 
+#ejercicio 1
 @app.route('/critical_users', methods=['GET', 'POST'])
 def xUsers():
     if request.method=='POST':
         num_users = int(request.form['num_users'])
-        top_x_criticos, num_critical = exercise_1_practica2.xUsers(num_users)
+        top_x_criticos, num_critical = exercise_1and2_practica2.xUsers(num_users)
     else:
-        top_x_criticos, num_critical = exercise_1_practica2.xUsers(1)
+        top_x_criticos, num_critical = exercise_1and2_practica2.xUsers(1)
         top_x_criticos = None
 
     return render_template('exercise_1_practica2.html', top_x_criticos=top_x_criticos, num_critical=num_critical)
@@ -61,12 +62,26 @@ def xUsers():
 def xPages():
     if request.method=='POST':
         num_pages = int(request.form['num_pages'])
-        top_x_pages, num_critical = exercise_1_practica2.xPages(num_pages)
+        top_x_pages, num_critical = exercise_1and2_practica2.xPages(num_pages)
     else:
-        top_x_pages, num_critical = exercise_1_practica2.xPages(1)
+        top_x_pages, num_critical = exercise_1and2_practica2.xPages(1)
         top_x_pages = None
 
     return render_template('exercise_1b_practica2.html', top_x_pages=top_x_pages, num_critical=num_critical)
+
+
+#ejercicio 2
+
+@app.route('/critical_users_ex2', methods=['GET', 'POST'])
+def users_ex2():
+    if request.method=='POST':
+        num_users = int(request.form['num_users'])
+        clics = request.form['clics']
+        top_x_users, num_critical = exercise_1and2_practica2.xUsersClics(num_users, clics)
+    else:
+        top_x_users, num_critical = exercise_1and2_practica2.xUsersClics(1, 'above')
+        top_x_users = None
+    return render_template('exercise_2_practica2.html', top_x_users=top_x_users, num_critical=num_critical)
 
 
 if __name__ == '__main__':
