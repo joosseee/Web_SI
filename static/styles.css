@@ -1,5 +1,6 @@
 body {
     font-family: Arial, sans-serif;
+    font-size: 18px;
     background-color: #f2f2f2;
     margin: 0;
     padding: 0;
@@ -20,7 +21,7 @@ body {
 
 h1 {
     color: #333;
-    font-size:30px ;
+    font-size:36px ;
 }
 
 p {
@@ -45,4 +46,32 @@ a {
 
 a:hover {
     text-decoration: underline;
+}
+
+div {
+    text-align: left;
+
+    padding: 20px;
+    margin-left: 0;
+}
+
+span {
+    font-weight: bold;
+}
+
+table {
+    border: 3px solid #ccc;
+    border-collapse: collapse;
+    width: 100%;
+    margin: 20px 0;
+}
+
+th, td {
+    border: 3px solid #ccc;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
 }

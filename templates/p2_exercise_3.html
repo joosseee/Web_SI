@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Dashboard de Vulnerabilidades</title>
+</head>
+<body>
+    <div>
+        <h1>Últimas 10 Vulnerabilidades</h1>
+        <br>
+        <table>
+            <tr>
+                <th>Id</th>
+                <th>Descripción</th>
+                <th>Fecha Publicación</th>
+                <th>Fecha Modificación</th>
+                <th>Puntuación CVSS</th>
+            </tr>
+            {% for vulnerability in vulnerabilities %}
+                <tr>
+                    <td><span>{{ vulnerability.id }}</span></td>
+                    <td style="width: 900px">{{ vulnerability.summary }}</td>
+                    <td>{{ vulnerability.Published }}</td>
+                    <td>{{ vulnerability.Modified }}</td>
+                    <td>{{ vulnerability.cvss }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+</body>
+</html>

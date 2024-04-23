@@ -5,6 +5,8 @@ import exercise_3
 import exercise_4
 import matplotlib
 import exercise_1and2_practica2
+import p2_exercise_3
+
 
 app = Flask(__name__)
 
@@ -82,6 +84,14 @@ def users_ex2():
         top_x_users, num_critical = exercise_1and2_practica2.xUsersClics(1, 'above')
         top_x_users = None
     return render_template('exercise_2_practica2.html', top_x_users=top_x_users, num_critical=num_critical)
+
+
+# Practica 2 --> Ejercicio 3
+
+@app.route('/vulnerabilities')
+def show_vulnerabilities():
+    vulnerabilities = p2_exercise_3.get_latest_vulnerabilities()
+    return render_template('p2_exercise_3.html', vulnerabilities=vulnerabilities[:10])
 
 
 if __name__ == '__main__':
