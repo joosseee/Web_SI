@@ -4,7 +4,7 @@ import os
 
 
 def remove_database():
-    database_path = 'bbdd.db'
+    database_path = 'data/bbdd.db'
 
     if os.path.exists(database_path):
         os.remove(database_path)
@@ -91,7 +91,7 @@ def create_table_legal():
 remove_database()
 
 # Conexion a la BBDD
-con = sqlite3.connect('bbdd.db')
+con = sqlite3.connect('data/bbdd.db')
 
 # Crear tabla users
 create_table_users()

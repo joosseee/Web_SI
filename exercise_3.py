@@ -10,7 +10,7 @@ pd.set_option('display.width', None)
 def stats_function():
 
     # Conectar a la base de datos SQLite
-    conn = sqlite3.connect('bbdd.db')
+    conn = sqlite3.connect('data/bbdd.db')
 
     emails_phishing_df = pd.read_sql_query("SELECT permission, emails_phising FROM users", conn)
     passwords_df = pd.read_sql_query("SELECT hash_password, emails_phising FROM users", conn)

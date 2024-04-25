@@ -6,6 +6,8 @@ import exercise_4
 import matplotlib
 import exercise_1and2_practica2
 import p2_exercise_3
+import numpy as np
+from joblib import load
 
 
 app = Flask(__name__)
@@ -16,6 +18,9 @@ with open('data/users.json') as users_file:
 
 with open('data/legal.json') as web_history_file:
     web_history_data = json.load(web_history_file)
+
+
+modelo_regresion_lineal = load('data/modelo_regresion_lineal.joblib')
 
 
 @app.route('/')
@@ -92,6 +97,38 @@ def users_ex2():
 def show_vulnerabilities():
     vulnerabilities = p2_exercise_3.get_latest_vulnerabilities()
     return render_template('p2_exercise_3.html', vulnerabilities=vulnerabilities[:10])
+
+
+# Practica 2 --> Ejercicio 5.1
+
+@app.route('/predictions', methods=['GET', 'POST'])
+def predict_criticality():
+    if request.method == 'POST':
+        try:
+            name = request.form['name']
+            phone = request.form['phone']
+            province = request.form['province']
+            permission = int(request.form['permission'])
+            total_emails = int(request.form['total_emails'])
+            phishing_emails = int(request.form['phishing_emails'])
+            clicked_emails = int(request.form['clicked_emails'])
+            analysis_method = request.form['analysis_method']
+
+            model_input = np.array([[clicked_emails / phishing_emails]])
+
+            if analysis_method == 'linear_regression':
+                result = modelo_regresion_lineal.predict(model_input)[0]
+            elif analysis_method == 'decision_tree':
+                # Resultado del modelo de Árbol de Decisión
+                result = 0
+            else:
+                # Resultado del modelo de Bosque Aleatorio
+                result = 0
+
+            return render_template('p2_exercise_5.1.html', prediction=f'Usuario crítico: {"SI" if result > 0.5 else "NO"}')
+        except Exception as e:
+            return render_template('p2_exercise_5.1.html', prediction=f'Error: {str(e)}')
+    return render_template('p2_exercise_5.1.html')
 
 
 if __name__ == '__main__':

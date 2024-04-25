@@ -3,7 +3,7 @@ import pandas as pd
 
 
 def data_querys():
-    con = sqlite3.connect('bbdd.db')
+    con = sqlite3.connect('data/bbdd.db')
 
 
     # consultas
