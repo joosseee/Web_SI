@@ -93,6 +93,43 @@ def show_vulnerabilities():
     vulnerabilities = p2_exercise_3.get_latest_vulnerabilities()
     return render_template('p2_exercise_3.html', vulnerabilities=vulnerabilities[:10])
 
+import json
+from flask import Flask, render_template, request, make_response,redirect, url_for, jsonify, send_from_directory
+import uuid
+import pdfkit
+import os
+import exercise_2
+import exercise_3
+import exercise_4
+import matplotlib
+import exercise_1and2_practica2
+import p2_exercise_3
+
+# Generar informes PDF
+
+@app.route('/pdfs/<filename>')
+def pdfs(filename):
+   
+    return send_from_directory('pdfs/', filename)
+
+
+@app.route('/generar_pdf', methods=['POST'])
+def generate_pdf():
+
+    html_content = request.json['contenido_informe']
+    pdf_filename = str(uuid.uuid4()) + '.pdf'
+
+    # Construir la ruta completa del archivo PDF
+    pdf_file_path = os.path.join('pdfs', pdf_filename)
+
+    # Configurar wkhtmltopdf con la ruta al ejecutable
+    wkhtmltopdf_path = os.path.join(os.getcwd(), 'wkhtmltopdf', 'bin', 'wkhtmltopdf.exe')
+    config = pdfkit.configuration(wkhtmltopdf=wkhtmltopdf_path)
+
+    pdfkit.from_string(html_content, pdf_file_path, configuration=config)
+
+    return jsonify({'pdf_path': pdf_file_path})
+    
 
 if __name__ == '__main__':
     app.run(debug=True)
