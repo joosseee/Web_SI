@@ -105,16 +105,13 @@ def show_vulnerabilities():
 def predict_criticality():
     if request.method == 'POST':
         try:
-            name = request.form['name']
-            phone = request.form['phone']
-            province = request.form['province']
             permission = int(request.form['permission'])
             total_emails = int(request.form['total_emails'])
             phishing_emails = int(request.form['phishing_emails'])
             clicked_emails = int(request.form['clicked_emails'])
             analysis_method = request.form['analysis_method']
 
-            model_input = np.array([[clicked_emails / phishing_emails]])
+            model_input = np.array([[clicked_emails / phishing_emails, phishing_emails / total_emails, permission]])
 
             if analysis_method == 'linear_regression':
                 result = modelo_regresion_lineal.predict(model_input)[0]
@@ -125,7 +122,7 @@ def predict_criticality():
                 # Resultado del modelo de Bosque Aleatorio
                 result = 0
 
-            return render_template('p2_exercise_5.1.html', prediction=f'Usuario crítico: {"SI" if result > 0.5 else "NO"}')
+            return render_template('p2_exercise_5.1.html', prediction=f'{"SI" if result > 0.5 else "NO"}')
         except Exception as e:
             return render_template('p2_exercise_5.1.html', prediction=f'Error: {str(e)}')
     return render_template('p2_exercise_5.1.html')

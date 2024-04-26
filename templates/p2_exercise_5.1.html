@@ -30,10 +30,11 @@
 
             <button type="submit">Analizar</button>
         </form>
+        {% if prediction %}
+            <h2 style="margin-top: 50px; margin-bottom: 0">Predicción de Usuario Crítico: <span>{{ prediction }}</span></h2>
+        {% endif %}
     </div>
 
-    {% if prediction %}
-        <h2>Predicción: {{ prediction }}</h2>
-    {% endif %}
+
 </body>
 </html>

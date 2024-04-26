@@ -9,9 +9,7 @@ from joblib import dump
 
 
 # Función para guardar o reemplazar el modelo de Regresión Lineal
-def save_model(model):
-    path = 'data/modelo_regresion_lineal.joblib'
-
+def save_model(model, path):
     if os.path.exists(path):
         os.remove(path)
 
@@ -39,6 +37,14 @@ df_users['prob_click_spam'] = df_users['emails_clicked'] / df_users['emails_phis
 df_users['prob_click_spam'] = df_users['prob_click_spam'].fillna(0)
 
 
+# Calcular la proporción de emails de phishing sobre el total
+df_users['phishing_ratio'] = df_users['emails_phising'] / df_users['emails_total'].replace(0, np.nan)
+
+
+# Llenar los valores NaN resultantes de la división por cero con 0
+df_users['phishing_ratio'] = df_users['phishing_ratio'].fillna(0)
+
+
 # Cargar el archivo JSON para extraer el estado crítico de cada usuario
 with open('data/users_data_online_clasificado.json', 'r') as file:
     json_data = json.load(file)
@@ -55,8 +61,8 @@ for user_dict in json_data['usuarios']:
 df_users['critico'] = df_users['username'].apply(lambda x: critico_info.get(x, 0))
 
 
-# Seleccionar las características y la variable objetivo
-X = df_users[['prob_click_spam']]
+# Seleccionar las características (proporción de emails phishing | probabilidad de click phishing | permiso) y la variable objetivo (criticidad)
+X = df_users[['phishing_ratio', 'prob_click_spam', 'permission']]
 y = df_users['critico']
 
 
@@ -77,4 +83,4 @@ y_pred = modelo.predict(x_test)
 
 
 # Guardar el modelo de Regresión Lineal
-save_model(modelo)
+save_model(modelo, 'data/modelo_regresion_lineal.joblib')
