@@ -1,7 +1,10 @@
 import json
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash,  jsonify, send_from_directory
 from flask_wtf.csrf import CSRFProtect
 from flask_login import LoginManager, login_user, logout_user, login_required
+import uuid
+import pdfkit
+import os
 import exercise_2
 import exercise_3
 import exercise_4
@@ -126,6 +129,32 @@ def show_vulnerabilities():
 
 #Practica 3 --> Ejercicio 4 pdf
 
+
+@app.route('/pdfs/<filename>')
+@login_required
+def pdfs(filename):
+   
+    return send_from_directory('pdfs/', filename)
+
+
+@app.route('/generar_pdf', methods=['POST'])
+@login_required
+def generate_pdf():
+
+    html_content = request.json['contenido_informe']
+    pdf_filename = str(uuid.uuid4()) + '.pdf'
+
+    # Construir la ruta completa del archivo PDF
+    pdf_file_path = os.path.join('pdfs', pdf_filename)
+
+    # Configurar wkhtmltopdf con la ruta al ejecutable
+    wkhtmltopdf_path = os.path.join(os.getcwd(), 'wkhtmltopdf', 'bin', 'wkhtmltopdf.exe')
+    configure = pdfkit.configuration(wkhtmltopdf=wkhtmltopdf_path)
+
+    pdfkit.from_string(html_content, pdf_file_path, configuration=configure)
+
+    return jsonify({'pdf_path': pdf_file_path})
+    
 
 
 #Practica 3 --> Ejercicio 4 login
