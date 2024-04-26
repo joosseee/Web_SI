@@ -131,13 +131,14 @@ def show_vulnerabilities():
 
 
 @app.route('/pdfs/<filename>')
-
+@login_required
 def pdfs(filename):
    
     return send_from_directory('pdfs/', filename)
 
 
 @app.route('/generar_pdf', methods=['POST'])
+@login_required
 def generate_pdf():
 
     html_content = request.json['contenido_informe']
@@ -148,9 +149,9 @@ def generate_pdf():
 
     # Configurar wkhtmltopdf con la ruta al ejecutable
     wkhtmltopdf_path = os.path.join(os.getcwd(), 'wkhtmltopdf', 'bin', 'wkhtmltopdf.exe')
-    config = pdfkit.configuration(wkhtmltopdf=wkhtmltopdf_path)
+    configure = pdfkit.configuration(wkhtmltopdf=wkhtmltopdf_path)
 
-    pdfkit.from_string(html_content, pdf_file_path, configuration=config)
+    pdfkit.from_string(html_content, pdf_file_path, configuration=configure)
 
     return jsonify({'pdf_path': pdf_file_path})
     
