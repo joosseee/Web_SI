@@ -129,13 +129,11 @@ def show_vulnerabilities():
 
 #Practica 3 --> Ejercicio 4 pdf
 
-
 @app.route('/pdfs/<filename>')
 @login_required
 def pdfs(filename):
    
     return send_from_directory('pdfs/', filename)
-
 
 @app.route('/generar_pdf', methods=['POST'])
 @login_required
@@ -155,7 +153,6 @@ def generate_pdf():
 
     return jsonify({'pdf_path': pdf_file_path})
     
-
 
 #Practica 3 --> Ejercicio 4 login
 @app.route('/')

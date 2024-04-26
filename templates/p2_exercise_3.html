@@ -8,7 +8,7 @@
 </head>
 <body>
     <div id="content_to_pdf">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
         <h1>Últimas 10 Vulnerabilidades</h1>
         <br>
         <table>
@@ -31,6 +31,8 @@
         </table>
     </div>
     <button id="generarBtn">Generar Informe</button>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  
     <script>
         document.getElementById("generarBtn").addEventListener("click", function() {
             var contenidoDiv = document.getElementById("content_to_pdf").innerHTML;
@@ -51,7 +53,7 @@
     
             // Obtener el valor del token CSRF
             var csrfToken = document.querySelector('input[name="csrf_token"]').value;
-    
+            console.log(contenidoInforme)
             // Llamada AJAX para solicitar la generación del PDF
             var xhr = new XMLHttpRequest();
             xhr.open("POST", "/generar_pdf", true);
