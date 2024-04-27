@@ -6,6 +6,7 @@ import os
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestRegressor
+from sklearn.tree import DecisionTreeRegressor
 from joblib import dump
 
 
@@ -74,18 +75,21 @@ x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 # Modelo de Regresión Lineal
 modelo = LinearRegression()
 modeloRandomForest = RandomForestRegressor()
+#Modelo de Árbol de Decisión
+modeloDecisionTree = DecisionTreeRegressor()
 
-
-# Entrenar el modelo
+# Entrenar los modelos
 modelo.fit(x_train, y_train)
 modeloRandomForest.fit(x_train,y_train)
+modeloDecisionTree.fit(x_train,y_train)
 
 
 # Hacer predicciones con el conjunto de prueba
 y_pred = modelo.predict(x_test)
 y_pred_randomForest = modeloRandomForest.predict(x_test)
-
+y_pred_decisionTree = modeloDecisionTree.predict(x_test)
 
 # Guardar el modelo de Regresión Lineal
 save_model(modelo, 'data/modelo_regresion_lineal.joblib')
 save_model(modeloRandomForest, 'data/modelo_random_forest.joblib')
+save_model(modeloDecisionTree, 'data/modelo_decision_tree.joblib')

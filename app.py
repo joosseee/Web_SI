@@ -22,7 +22,7 @@ with open('data/legal.json') as web_history_file:
 
 modelo_regresion_lineal = load('data/modelo_regresion_lineal.joblib')
 modelo_random_forest = load('data/modelo_random_forest.joblib')
-
+modelo_decision_tree = load('data/modelo_decision_tree.joblib')
 
 @app.route('/')
 def index():
@@ -117,8 +117,7 @@ def predict_criticality():
             if analysis_method == 'linear_regression':
                 result = modelo_regresion_lineal.predict(model_input)[0]
             elif analysis_method == 'decision_tree':
-                # Resultado del modelo de Árbol de Decisión
-                result = 0
+                result = modelo_decision_tree.predict(model_input)[0]
             else:
                 # Resultado del modelo de Bosque Aleatorio
                 result = modelo_random_forest.predict(model_input)[0]
