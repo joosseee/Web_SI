@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
@@ -8,9 +9,11 @@
 </head>
 <body style="display: flex">
     <div class="container">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <h1>Analizador de Usuarios</h1>
         <h2>Por favor, completa los detalles con los datos del nuevo usuario para poder analizar su criticidad</h2>
         <form action="/predictions" method="post">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             Nombre: <input type="text" name="name" required><br>
             Teléfono: <input type="text" name="phone" required><br>
             Provincia: <input type="text" name="province" required><br>

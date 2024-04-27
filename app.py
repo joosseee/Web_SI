@@ -47,16 +47,11 @@ def load_user(username):
 
 
 
-#@app.route('/')
-#def index():
-#    #return render_template('index.html')
+
 modelo_regresion_lineal = load('data/modelo_regresion_lineal.joblib')
 modelo_random_forest = load('data/modelo_random_forest.joblib')
 modelo_decision_tree = load('data/modelo_decision_tree.joblib')
 
-@app.route('/')
-def index():
-    return render_template('index.html')
 
 
 @app.route('/MIS_functions')
@@ -207,7 +202,9 @@ def status_404(error):
 # Practica 2 --> Ejercicio 5.1
 
 @app.route('/predictions', methods=['GET', 'POST'])
+@login_required
 def predict_criticality():
+    
     if request.method == 'POST':
         try:
             permission = int(request.form['permission'])
