@@ -21,6 +21,7 @@ with open('data/legal.json') as web_history_file:
 
 
 modelo_regresion_lineal = load('data/modelo_regresion_lineal.joblib')
+modelo_random_forest = load('data/modelo_random_forest.joblib')
 
 
 @app.route('/')
@@ -120,7 +121,7 @@ def predict_criticality():
                 result = 0
             else:
                 # Resultado del modelo de Bosque Aleatorio
-                result = 0
+                result = modelo_random_forest.predict(model_input)[0]
 
             return render_template('p2_exercise_5.1.html', prediction=f'{"SI" if result > 0.5 else "NO"}')
         except Exception as e:

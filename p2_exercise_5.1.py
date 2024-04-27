@@ -5,6 +5,7 @@ import json
 import os
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
+from sklearn.ensemble import RandomForestRegressor
 from joblib import dump
 
 
@@ -72,15 +73,19 @@ x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 
 # Modelo de Regresión Lineal
 modelo = LinearRegression()
+modeloRandomForest = RandomForestRegressor()
 
 
 # Entrenar el modelo
 modelo.fit(x_train, y_train)
+modeloRandomForest.fit(x_train,y_train)
 
 
 # Hacer predicciones con el conjunto de prueba
 y_pred = modelo.predict(x_test)
+y_pred_randomForest = modeloRandomForest.predict(x_test)
 
 
 # Guardar el modelo de Regresión Lineal
 save_model(modelo, 'data/modelo_regresion_lineal.joblib')
+save_model(modeloRandomForest, 'data/modelo_random_forest.joblib')
