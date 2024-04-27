@@ -17,6 +17,9 @@ from config import config
 from models.ModelUser import ModelUser
 #Entities
 from models.entities.User import User
+import numpy as np
+from joblib import load
+
 
 app = Flask(__name__)
 
@@ -47,6 +50,13 @@ def load_user(username):
 #@app.route('/')
 #def index():
 #    #return render_template('index.html')
+modelo_regresion_lineal = load('data/modelo_regresion_lineal.joblib')
+modelo_random_forest = load('data/modelo_random_forest.joblib')
+modelo_decision_tree = load('data/modelo_decision_tree.joblib')
+
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 
 @app.route('/MIS_functions')
@@ -194,6 +204,32 @@ def status_404(error):
 
 
 
+# Practica 2 --> Ejercicio 5.1
+
+@app.route('/predictions', methods=['GET', 'POST'])
+def predict_criticality():
+    if request.method == 'POST':
+        try:
+            permission = int(request.form['permission'])
+            total_emails = int(request.form['total_emails'])
+            phishing_emails = int(request.form['phishing_emails'])
+            clicked_emails = int(request.form['clicked_emails'])
+            analysis_method = request.form['analysis_method']
+
+            model_input = np.array([[clicked_emails / phishing_emails, phishing_emails / total_emails, permission]])
+
+            if analysis_method == 'linear_regression':
+                result = modelo_regresion_lineal.predict(model_input)[0]
+            elif analysis_method == 'decision_tree':
+                result = modelo_decision_tree.predict(model_input)[0]
+            else:
+                # Resultado del modelo de Bosque Aleatorio
+                result = modelo_random_forest.predict(model_input)[0]
+
+            return render_template('p2_exercise_5.1.html', prediction=f'{"SI" if result > 0.5 else "NO"}')
+        except Exception as e:
+            return render_template('p2_exercise_5.1.html', prediction=f'Error: {str(e)}')
+    return render_template('p2_exercise_5.1.html')
 
 
 if __name__ == '__main__':

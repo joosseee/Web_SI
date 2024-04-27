@@ -27,7 +27,7 @@ def plot_to_base64(plot):
 
 
 def meanPasswords():
-    conn = sqlite3.connect("bbdd.db")
+    conn = sqlite3.connect("data/bbdd.db")
     sql_query_users = "SELECT dates_ip.fecha, dates_ip.user_id FROM dates_ip JOIN users ON dates_ip.user_id = users.username WHERE users.permission = 0"
     sql_query_admins = "SELECT dates_ip.fecha, dates_ip.user_id FROM dates_ip JOIN users ON dates_ip.user_id = users.username WHERE users.permission = 1"
 
@@ -61,7 +61,7 @@ def meanPasswords():
 
 
 def tenUSERS():
-    conn = sqlite3.connect('bbdd.db')
+    conn = sqlite3.connect('data/bbdd.db')
 
     usuarios_df = pd.read_sql_query("SELECT username, hash_password, emails_clicked, emails_phising FROM users", conn)
 
@@ -98,7 +98,7 @@ def tenUSERS():
 
 def paginas_desactualizadas():
 
-    conn = sqlite3.connect('bbdd.db')
+    conn = sqlite3.connect('data/bbdd.db')
 
     # Leer los datos en un DataFrame de Pandas
     df = pd.read_sql_query("SELECT web_URL, cookies, warning, data_protection,creation FROM legal", conn)
@@ -123,7 +123,7 @@ def paginas_desactualizadas():
 
 def webs_politicas_privacidad_por_año():
 
-    conn = sqlite3.connect('bbdd.db')
+    conn = sqlite3.connect('data/bbdd.db')
 
     # Consulta SQL para webs que cumplen todas las políticas de privacidad por año de creación
     sql_query_cumplen = """

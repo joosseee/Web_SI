@@ -17,7 +17,7 @@ def plot_to_base64(plot):
 
 
 def xUsers(num_users):
-    conn = sqlite3.connect('bbdd.db')
+    conn = sqlite3.connect('data/bbdd.db')
 
     usuarios_df = pd.read_sql_query("SELECT username, hash_password, emails_clicked, emails_phising FROM users", conn)
 
@@ -51,7 +51,7 @@ def xUsers(num_users):
 
 
 def xPages(num_pages):
-    conn = sqlite3.connect('bbdd.db')
+    conn = sqlite3.connect('data/bbdd.db')
     data_df = pd.read_sql_query("SELECT web_URL, cookies, warning, data_protection, creation FROM legal", conn)
 
     data_df['puntuajes'] = data_df['warning'] + data_df['cookies'] + data_df['data_protection']
@@ -75,7 +75,7 @@ def xPages(num_pages):
     return paginas_desactualizadas_img, num_critical
 
 def xUsersClics(num_users, clics):
-    conn = sqlite3.connect('bbdd.db')
+    conn = sqlite3.connect('data/bbdd.db')
 
     usuarios_df = pd.read_sql_query("SELECT username, hash_password, emails_clicked, emails_phising FROM users", conn)
 

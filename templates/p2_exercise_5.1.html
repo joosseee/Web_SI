@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Análisis de Criticidad</title>
+</head>
+<body style="display: flex">
+    <div class="container">
+        <h1>Analizador de Usuarios</h1>
+        <h2>Por favor, completa los detalles con los datos del nuevo usuario para poder analizar su criticidad</h2>
+        <form action="/predictions" method="post">
+            Nombre: <input type="text" name="name" required><br>
+            Teléfono: <input type="text" name="phone" required><br>
+            Provincia: <input type="text" name="province" required><br>
+            Permiso: <select name="permission" required>
+                <option value="0">Usuario</option>
+                <option value="1">Administrador</option>
+            </select><br>
+            Total de Emails Recibidos: <input type="number" name="total_emails" required><br>
+            Total de Emails con Phishing: <input type="number" name="phishing_emails" required><br>
+            Total de Emails Clicados: <input type="number" name="clicked_emails" required><br><br><br>
+
+            Metodo de Análisis: <select name="analysis_method" required>
+                <option value="linear_regression">Regresión Lineal</option>
+                <option value="decision_tree">Árbol de Decisión</option>
+                <option value="random_forest">Bosque Aleatorio</option>
+            </select><br><br>
+
+            <button type="submit">Analizar</button>
+        </form>
+        {% if prediction %}
+            <h2 style="margin-top: 50px; margin-bottom: 0">Predicción de Usuario Crítico: <span>{{ prediction }}</span></h2>
+        {% endif %}
+    </div>
+
+
+</body>
+</html>
