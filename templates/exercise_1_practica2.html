@@ -2,18 +2,20 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <title>Usuarios críticos</title>
 </head>
 <body>
     <div>
         <h1>Seleccione el número de usuarios con el que desea realizar la gráfica</h1>
-        <li>
+        <br>
             <form action="/critical_users" method="post">
                 <label for="num_users">Número de usuarios críticos:</label>
                 <input type="number" id="num_users" name="num_users" min="1" max={{ num_critical }} required>
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <button type="submit">Mostrar</button>
             </form>
-        </li>
     </div>
 
     <div>

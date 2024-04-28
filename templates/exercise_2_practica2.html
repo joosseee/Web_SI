@@ -2,11 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <title>Usuarios críticos y clics en correos de spam</title>
 </head>
 <body>
     <div>
         <h1>Selecciones el número de usuarios críticos y el filtro de clics de correo de spam:</h1>
+        <br>
         <form action="/critical_users_ex2" method="post">
             <label for="num_users">Número de usuarios críticos:</label>
             <input type="number" id="num_users" name="num_users" min="1" max="{{ num_critical }}"><br>
@@ -14,7 +17,8 @@
             <select id="clics" name="clics">
                 <option value="above">Más del 50%</option>
                 <option value="below">Menos del 50%</option>
-            </select><br>
+            </select>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <button type="submit">Mostrar</button>
         </form>
     </div>
