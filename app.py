@@ -1,5 +1,5 @@
 import json
-from flask import Flask, render_template, request, redirect, url_for, flash,  jsonify, send_from_directory
+from flask import Flask, render_template, request, redirect, url_for, flash,  jsonify, send_from_directory,session
 from flask_wtf.csrf import CSRFProtect
 from flask_login import LoginManager, login_user, logout_user, login_required
 import uuid
@@ -170,12 +170,15 @@ def index():
 @app.route('/login', methods=['GET','POST'])
 def login():
     if request.method=='POST':
+        session['username'] = request.form['username']
         user = User(request.form['username'],None,request.form['password'])
         logged_user=ModelUser.login(db,user)
         if logged_user != None:
             if logged_user.password:
                 login_user(logged_user)
-                return render_template('index.html')
+                if'username' in session:
+                    username = session['username']
+                    return render_template('index.html')
             else:
                 flash("Invalid password...")
                 return render_template('login.html')
@@ -188,6 +191,7 @@ def login():
 
 @app.route('/logout')
 def logout():
+    session.pop('username', None)
     logout_user
     return redirect(url_for('login'))
 
@@ -196,7 +200,6 @@ def status_401(error):
 
 def status_404(error):
     return "<h1>Página no encontrada</h1>",404
-
 
 
 # Practica 2 --> Ejercicio 5.1
