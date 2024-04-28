@@ -32,7 +32,7 @@ with open('data/legal.json') as web_history_file:
 
 
 #Logueo de usuario
-db = sqlite3.connect('bbdd.db',check_same_thread=False)
+db = sqlite3.connect('data/bbdd.db',check_same_thread=False)
 login_manager_app = LoginManager(app)
 csrf = CSRFProtect(app)
 @login_manager_app.user_loader
