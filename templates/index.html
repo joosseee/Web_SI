@@ -5,10 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inicio - Sistema de Información</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-     <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
-    <a class="btn btn-secondary" href="{{ url_for('logout') }}">Logout</a></head>
+    
+</head>
 <body>
     <h1>Bienvenido al Sistema de Información</h1>
     <p>Selecciona una opción:</p>
@@ -22,7 +20,7 @@
         <li><a href="{{ url_for('users_ex2') }}">Gráfica variable de usuarios críticos y clics en correos de spam</a></li>
         <li><a href="{{ url_for('show_vulnerabilities') }}">Últimas 10 vulnerabilidades en tiempo real</a></li>
         <li><a href="{{ url_for('predict_criticality') }}">Predicción de usuarios criticos basado en los modelos de aprendizaje supervisados</a></li>
-   
     </ul>
+    <a id="btnLog" href="{{ url_for('logout') }}">Logout</a>
 </body>
 </html>

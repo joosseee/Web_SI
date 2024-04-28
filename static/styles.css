@@ -10,6 +10,25 @@ body {
     justify-content: center;
 }
 
+
+#btnLog {
+    background-color: #007bff; /* Azul Bootstrap */
+    color: #fff; /* Texto blanco */
+    padding: 10px 20px; /* Espaciado interno */
+    font-size: 16px; /* Tamaño del texto */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    cursor: pointer; /* Cambia el cursor al pasar por encima */
+    display: block; /* Hace que el botón sea un bloque */
+    margin: 0 auto; /* Centra el botón horizontalmente */
+    text-align: center; /* Alinea el texto en el centro */
+    text-decoration: none; /* Quita el subrayado del texto */
+}
+
+#btnLog:hover {
+    background-color: #0056b3; /* Cambia el color de fondo al pasar el cursor */
+}
+
 .container {
     width: 100%;
     max-width: 600px;
@@ -135,3 +154,4 @@ button:hover {
 option, select, input {
     font-size: 14px;
 }
+
